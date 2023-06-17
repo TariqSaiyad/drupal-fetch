@@ -1,5 +1,11 @@
 # drupal-fetch
 
+## 0.1.2
+
+### Patch Changes
+
+- a03d980: Update import for jsona to fix esm import error
+
 ## 0.1.1
 
 ### Patch Changes
