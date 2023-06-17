@@ -1,5 +1,11 @@
 # drupal-fetch
 
+## 0.1.1
+
+### Patch Changes
+
+- 427c3a3: Updated package type to module
+
 ## 0.1.0
 
 ### Minor Changes
