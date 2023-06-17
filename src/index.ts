@@ -6,7 +6,7 @@
  */
 
 import { DrupalJsonApiParams } from "drupal-jsonapi-params";
-import Jsona from "jsona";
+import { Jsona } from "jsona";
 import { stringify } from "qs";
 import {
   JsonApiOptions,
@@ -273,9 +273,9 @@ export class DrupalFetch {
     const children = links.filter((link) => link?.parent === parent);
     return children.length
       ? children.map((link) => ({
-        ...link,
-        items: this.buildMenuTree(links, link.id),
-      }))
+          ...link,
+          items: this.buildMenuTree(links, link.id),
+        }))
       : [];
   }
 
