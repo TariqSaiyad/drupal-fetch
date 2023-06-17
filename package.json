@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Helper functions to fetch JSON:API resources from a Drupal site.",
   "license": "MIT",
+  "type": "module",
   "publishConfig": {
     "access": "public"
   },
