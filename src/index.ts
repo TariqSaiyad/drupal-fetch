@@ -6,7 +6,7 @@
  */
 
 import { DrupalJsonApiParams } from "drupal-jsonapi-params";
-import Jsona from "jsona";
+import { Jsona } from "jsona";
 import { stringify } from "qs";
 import {
   JsonApiOptions,
@@ -80,7 +80,6 @@ export class DrupalFetch {
     if (!response?.ok) await this.handleApiError(response);
 
     const json = await response.json();
-    console.log(json);
 
     return this.deserialize(json) as T;
   }
@@ -273,9 +272,9 @@ export class DrupalFetch {
     const children = links.filter((link) => link?.parent === parent);
     return children.length
       ? children.map((link) => ({
-        ...link,
-        items: this.buildMenuTree(links, link.id),
-      }))
+          ...link,
+          items: this.buildMenuTree(links, link.id),
+        }))
       : [];
   }
 
@@ -310,7 +309,7 @@ export class DrupalFetch {
    */
   private _debug(message: string) {
     if (!this.debug) return;
-    console.debug(`[next-drupal]  ${message}`);
+    console.debug(`[debug]  ${message}`);
   }
 
   /**
