@@ -80,7 +80,6 @@ export class DrupalFetch {
     if (!response?.ok) await this.handleApiError(response);
 
     const json = await response.json();
-    console.log(json);
 
     return this.deserialize(json) as T;
   }
@@ -310,7 +309,7 @@ export class DrupalFetch {
    */
   private _debug(message: string) {
     if (!this.debug) return;
-    console.debug(`[next-drupal]  ${message}`);
+    console.debug(`[debug]  ${message}`);
   }
 
   /**
