@@ -74,11 +74,10 @@ params.addCustomParam({ "views-argument": ["11+15+19"] });
 const menuView = await fetcher.getView("menu--default", { params });
 ```
 
-## Using `drupal-jsonapi-params`
+## Using drupal-jsonapi-params
 
 - We can form requests for specific data from drupal entities, and sort, paginate, filter them as needed using the [drupal-jsonapi-params](https://www.npmjs.com/package/drupal-jsonapi-params) package.
-- When making a request for content from Drupal, it is possible to inspect the json output by viewing the logs from the node docker container. See [Guide - Debugging](#debugging)
-- Most fields, entities usually have an `id` that can be useful as a `key` prop when mapping through items in React.
+- Most fields, entities have an `id` that can be useful as a `key` prop when mapping through items in React.
 
 ## Examples:
 
@@ -115,7 +114,7 @@ Output:
 
 ### Accessing referenced fields
 
-- Some fields are Drupal Entities themselves.
+- Some fields are Drupal entities themselves.
 - However, these objects can get really large, so we can request only the required properties as below:
 
 #### Media Entity
