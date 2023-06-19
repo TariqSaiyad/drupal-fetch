@@ -21,7 +21,6 @@ import {
 import { TJsonApiBody } from "jsona/lib/JsonaTypes";
 
 const DEFAULT_API_PREFIX = "/jsonapi";
-
 const DEFAULT_FETCH_OPTIONS: JsonApiOptions = {};
 
 /**
@@ -59,11 +58,7 @@ export class DrupalFetch {
    * @param {JsonApiOptions} - Options for the fetch operation.
    * @returns {Promise<T>} A Promise that resolves to the fetched resource.
    */
-  async getResource<T extends JsonApiResource>(
-    type: string,
-    uuid: string,
-    options: JsonApiOptions = DEFAULT_FETCH_OPTIONS
-  ): Promise<T> {
+  async getResource<T extends JsonApiResource>(type: string, uuid: string, options: JsonApiOptions = DEFAULT_FETCH_OPTIONS): Promise<T> {
     const apiPath = await this.getResourceEndpoint(type, options.locale);
 
     if (options.params && options.version) {
@@ -90,10 +85,7 @@ export class DrupalFetch {
    * @param {JsonApiOptions} - Options for the fetch operation.
    * @returns {Promise<T>} A Promise that resolves to the fetched resource collection.
    */
-  async getResourceCollection<T = JsonApiResource[]>(
-    type: string,
-    options: JsonApiOptions = DEFAULT_FETCH_OPTIONS
-  ): Promise<T> {
+  async getResourceCollection<T = JsonApiResource[]>(type: string, options: JsonApiOptions = DEFAULT_FETCH_OPTIONS): Promise<T> {
     const apiPath = await this.getResourceEndpoint(type, options.locale);
 
     const url = this.buildUrl(apiPath, options?.params);
@@ -116,9 +108,7 @@ export class DrupalFetch {
    * @returns {Promise<string[][]>} A Promise that resolves to an array of paths.
    */
   async getStaticPaths(types: string | string[]): Promise<string[][]> {
-    if (typeof types === "string") {
-      types = [types];
-    }
+    if (typeof types === "string") types = [types];
 
     const paths = await Promise.all(
       types.map(async (type) => {
@@ -142,10 +132,7 @@ export class DrupalFetch {
    * @param {JsonApiOptions} - Options for the fetch operation.
    * @returns {Promise<DrupalPathData|null>} A Promise that resolves to the path data, or null if not found.
    */
-  async getPathData(
-    path: string,
-    options: JsonApiOptions = DEFAULT_FETCH_OPTIONS
-  ): Promise<DrupalPathData | null> {
+  async getPathData(path: string, options: JsonApiOptions = DEFAULT_FETCH_OPTIONS): Promise<DrupalPathData | null> {
     const params = new DrupalJsonApiParams();
     params.addCustomParam({ path });
 
@@ -170,9 +157,7 @@ export class DrupalFetch {
       const response = await fetch(url.toString());
       return await response.json();
     } catch (error: any) {
-      new Error(
-        `Failed to fetch JSON:API index at ${url.toString()} - ${error.message}`
-      );
+      new Error(`Failed to fetch JSON:API index at ${url.toString()} - ${error.message}`);
     }
     return null;
   }
@@ -183,14 +168,8 @@ export class DrupalFetch {
    * @param {JsonApiOptions} - Options for the fetch operation.
    * @returns {Promise<DrupalMenuItem[]>} A Promise that resolves to the menu items.
    */
-  async getMenu(
-    name: string,
-    options: JsonApiOptions = DEFAULT_FETCH_OPTIONS
-  ): Promise<DrupalMenuItem[]> {
-    const url = this.buildUrl(
-      `${this.apiPrefix}/menu_items/${name}`,
-      options?.params
-    );
+  async getMenu(name: string, options: JsonApiOptions = DEFAULT_FETCH_OPTIONS): Promise<DrupalMenuItem[]> {
+    const url = this.buildUrl(`${this.apiPrefix}/menu_items/${name}`, options?.params);
 
     this._debug(`Fetching menu items for ${name}.`);
     this._debug(url.toString());
@@ -211,15 +190,9 @@ export class DrupalFetch {
    * @param {JsonApiOptions} - Options for the fetch operation.
    * @returns {Promise<DrupalView<T>>} A Promise that resolves to the view results.
    */
-  async getView<T = JsonApiResource>(
-    name: string,
-    options: JsonApiOptions = DEFAULT_FETCH_OPTIONS
-  ): Promise<DrupalView<T>> {
+  async getView<T = JsonApiResource>(name: string, options: JsonApiOptions = DEFAULT_FETCH_OPTIONS): Promise<DrupalView<T>> {
     const [viewId, displayId] = name.split("--");
-    const url = this.buildUrl(
-      `${this.apiPrefix}/views/${viewId}/${displayId}`,
-      options?.params
-    );
+    const url = this.buildUrl(`${this.apiPrefix}/views/${viewId}/${displayId}`, options?.params);
     const response = await fetch(url.toString(), options.fetchOptions);
 
     if (!response?.ok) await this.handleApiError(response);
@@ -241,18 +214,12 @@ export class DrupalFetch {
    * @param {Locale} [locale] - The locale of the resource.
    * @returns {Promise<string>} A Promise that resolves to the endpoint URL.
    */
-  private async getResourceEndpoint(
-    type: string,
-    locale?: Locale
-  ): Promise<string> {
+  private async getResourceEndpoint(type: string, locale?: Locale): Promise<string> {
     const index = await this.getIndex();
 
     const link = index?.links?.[type] as { href: string };
 
-    if (!link)
-      console.error(
-        `Resource of type '${type}' and locale ${locale} not found.`
-      );
+    if (!link) console.error(`Resource of type '${type}' and locale ${locale} not found.`);
 
     return link.href;
   }
@@ -263,18 +230,15 @@ export class DrupalFetch {
    * @param {string} - The ID of the parent menu item.
    * @returns {DrupalMenuItem[]} The hierarchical menu tree.
    */
-  private buildMenuTree(
-    links: DrupalMenuItem[],
-    parent: DrupalMenuItem["id"] = ""
-  ): DrupalMenuItem[] {
+  private buildMenuTree(links: DrupalMenuItem[], parent: DrupalMenuItem["id"] = ""): DrupalMenuItem[] {
     if (!links?.length) return [];
 
     const children = links.filter((link) => link?.parent === parent);
     return children.length
       ? children.map((link) => ({
-          ...link,
-          items: this.buildMenuTree(links, link.id),
-        }))
+        ...link,
+        items: this.buildMenuTree(links, link.id),
+      }))
       : [];
   }
 
