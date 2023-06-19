@@ -76,8 +76,6 @@ const menuView = await fetcher.getView("menu--default", { params });
 
 ## Using `drupal-jsonapi-params`
 
-# Using JSON API Params
-
 - We can form requests for specific data from drupal entities, and sort, paginate, filter them as needed using the [drupal-jsonapi-params](https://www.npmjs.com/package/drupal-jsonapi-params) package.
 - When making a request for content from Drupal, it is possible to inspect the json output by viewing the logs from the node docker container. See [Guide - Debugging](#debugging)
 - Most fields, entities usually have an `id` that can be useful as a `key` prop when mapping through items in React.
