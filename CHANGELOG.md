@@ -1,5 +1,12 @@
 # drupal-fetch
 
+## 0.1.4
+
+### Patch Changes
+
+- 2b735d4: - Updated README.md with more examples
+  - Formatting
+
 ## 0.1.3
 
 ### Patch Changes
