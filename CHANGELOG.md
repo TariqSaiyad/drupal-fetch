@@ -1,5 +1,11 @@
 # drupal-fetch
 
+## 0.1.5
+
+### Patch Changes
+
+- bfda5e9: Fix for empty jsonapi index
+
 ## 0.1.4
 
 ### Patch Changes
