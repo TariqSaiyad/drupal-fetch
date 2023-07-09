@@ -221,7 +221,7 @@ export class DrupalFetch {
 
     if (!link) console.error(`Resource of type '${type}' and locale ${locale} not found.`);
 
-    return link.href;
+    return link?.href;
   }
 
   /**
