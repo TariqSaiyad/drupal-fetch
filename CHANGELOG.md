@@ -1,5 +1,11 @@
 # drupal-fetch
 
+## 0.1.7
+
+### Patch Changes
+
+- 646175a: Manually build resource endpoint. This bypasses the need to query drupal for it
+
 ## 0.1.6
 
 ### Patch Changes
