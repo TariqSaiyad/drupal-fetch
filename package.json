@@ -1,6 +1,6 @@
 {
   "name": "drupal-fetch",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Helper functions to fetch JSON:API resources from a Drupal site.",
   "license": "MIT",
   "type": "module",

@@ -1,5 +1,11 @@
 # drupal-fetch
 
+## 0.1.6
+
+### Patch Changes
+
+- d6ca47e: Force https when building the url
+
 ## 0.1.5
 
 ### Patch Changes
