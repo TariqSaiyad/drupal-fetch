@@ -7,18 +7,17 @@
 
 import { DrupalJsonApiParams } from "drupal-jsonapi-params";
 import { Jsona } from "jsona";
+import { TJsonApiBody } from "jsona/lib/JsonaTypes";
 import { stringify } from "qs";
 import {
-  JsonApiOptions,
   DrupalFetchOptions,
-  JsonApiResource,
-  DrupalPathData,
-  JsonApiResponse,
   DrupalMenuItem,
+  DrupalPathData,
   DrupalView,
-  Locale,
+  JsonApiOptions,
+  JsonApiResource,
+  Locale
 } from "./types";
-import { TJsonApiBody } from "jsona/lib/JsonaTypes";
 
 const DEFAULT_API_PREFIX = "/jsonapi";
 const DEFAULT_FETCH_OPTIONS: JsonApiOptions = {};
@@ -58,8 +57,9 @@ export class DrupalFetch {
    * @param {JsonApiOptions} - Options for the fetch operation.
    * @returns {Promise<T>} A Promise that resolves to the fetched resource.
    */
-  async getResource<T extends JsonApiResource>(type: string, uuid: string, options: JsonApiOptions = DEFAULT_FETCH_OPTIONS): Promise<T> {
-    const apiPath = await this.getResourceEndpoint(type, options.locale);
+  async getResource<T extends JsonApiResource>(type: string, uuid: string, options: JsonApiOptions = DEFAULT_FETCH_OPTIONS): Promise<T | null> {
+    const apiPath = this.getResourceEndpoint(type, options.locale);
+
 
     if (options.params && options.version) {
       options.params.addCustomParam({ resourceVersion: options.version });
@@ -86,7 +86,7 @@ export class DrupalFetch {
    * @returns {Promise<T>} A Promise that resolves to the fetched resource collection.
    */
   async getResourceCollection<T = JsonApiResource[]>(type: string, options: JsonApiOptions = DEFAULT_FETCH_OPTIONS): Promise<T> {
-    const apiPath = await this.getResourceEndpoint(type, options.locale);
+    const apiPath = this.getResourceEndpoint(type, options.locale);
 
     const url = this.buildUrl(apiPath, options?.params);
 
@@ -147,22 +147,6 @@ export class DrupalFetch {
   }
 
   /**
-   * Retrieves the JSON:API index.
-   * @returns {Promise<JsonApiResponse|null>} A Promise that resolves to the JSON:API index, or null if the fetch operation fails.
-   */
-  async getIndex(): Promise<JsonApiResponse | null> {
-    const url = this.buildUrl(this.apiPrefix);
-
-    try {
-      const response = await fetch(url.toString());
-      return await response.json();
-    } catch (error: any) {
-      new Error(`Failed to fetch JSON:API index at ${url.toString()} - ${error.message}`);
-    }
-    return null;
-  }
-
-  /**
    * Retrieves the menu items for the specified menu.
    * @param {string} name - The name of the menu.
    * @param {JsonApiOptions} - Options for the fetch operation.
@@ -214,14 +198,9 @@ export class DrupalFetch {
    * @param {Locale} [locale] - The locale of the resource.
    * @returns {Promise<string>} A Promise that resolves to the endpoint URL.
    */
-  private async getResourceEndpoint(type: string, locale?: Locale): Promise<string> {
-    const index = await this.getIndex();
-
-    const link = index?.links?.[type] as { href: string };
-
-    if (!link) console.error(`Resource of type '${type}' and locale ${locale} not found.`);
-
-    return link?.href;
+  private getResourceEndpoint(type: string, locale?: Locale): string {
+    const path = type.replace("--", "/");
+    return locale ? `${this.baseUrl}/${locale}${this.apiPrefix}/${path}` : `${this.baseUrl}${this.apiPrefix}/${path}`;
   }
 
   /**
@@ -255,7 +234,8 @@ export class DrupalFetch {
 
     if (params) url.search = stringify(params.getQueryObject());
 
-    url.protocol='https'
+    url.protocol = 'https'
+
     return url;
   }
 
