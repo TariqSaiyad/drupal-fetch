@@ -255,6 +255,7 @@ export class DrupalFetch {
 
     if (params) url.search = stringify(params.getQueryObject());
 
+    url.protocol='https'
     return url;
   }
 
