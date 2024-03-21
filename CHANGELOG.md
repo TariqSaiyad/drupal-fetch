@@ -1,5 +1,11 @@
 # drupal-fetch
 
+## 0.1.8
+
+### Patch Changes
+
+- 190876f: Added support for locales and translation
+
 ## 0.1.7
 
 ### Patch Changes
