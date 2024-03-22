@@ -59,13 +59,18 @@ export class DrupalFetch {
    * @returns {Promise<T>} A Promise that resolves to the fetched resource.
    */
   async getResource<T extends JsonApiResource>(type: string, uuid: string, options: JsonApiOptions = DEFAULT_FETCH_OPTIONS): Promise<T> {
-    const apiPath = await this.getResourceEndpoint(type, options.locale);
+    const apiPath = await this.getResourceEndpoint(type, options?.locale);
+    const apiURL = new URL(apiPath);
 
     if (options.params && options.version) {
       options.params.addCustomParam({ resourceVersion: options.version });
     }
 
-    const url = this.buildUrl(`${apiPath}/${uuid}`, options?.params);
+    if (options?.locale) {
+      apiURL.pathname = `${options.locale}/${apiURL.pathname}`;
+    }
+
+    const url = this.buildUrl(`${apiURL.toString()}/${uuid}`, options?.params);
 
     this._debug(`Fetching resource ${type} with id ${uuid}.`);
     this._debug(url.toString());
@@ -86,9 +91,14 @@ export class DrupalFetch {
    * @returns {Promise<T>} A Promise that resolves to the fetched resource collection.
    */
   async getResourceCollection<T = JsonApiResource[]>(type: string, options: JsonApiOptions = DEFAULT_FETCH_OPTIONS): Promise<T> {
-    const apiPath = await this.getResourceEndpoint(type, options.locale);
+    const apiPath = await this.getResourceEndpoint(type, options?.locale);
+    const apiURL = new URL(apiPath);
 
-    const url = this.buildUrl(apiPath, options?.params);
+    if (options?.locale) {
+      apiURL.pathname = `${options.locale}/${apiURL.pathname}`;
+    }
+
+    const url = this.buildUrl(apiURL.toString(), options?.params);
 
     this._debug(`Fetching resource collection of type ${type}`);
     this._debug(url.toString());
@@ -150,8 +160,8 @@ export class DrupalFetch {
    * Retrieves the JSON:API index.
    * @returns {Promise<JsonApiResponse|null>} A Promise that resolves to the JSON:API index, or null if the fetch operation fails.
    */
-  async getIndex(locale?: Locale): Promise<JsonApiResponse | null> {
-    const url = this.buildUrl(locale ? `/${locale}${this.apiPrefix}` : this.apiPrefix);
+  async getIndex(): Promise<JsonApiResponse | null> {
+    const url = this.buildUrl(this.apiPrefix);
 
     try {
       const response = await fetch(url.toString());
@@ -214,8 +224,8 @@ export class DrupalFetch {
    * @param {Locale} [locale] - The locale of the resource.
    * @returns {Promise<string>} A Promise that resolves to the endpoint URL.
    */
-  private async getResourceEndpoint(type: string, locale?: Locale): Promise<string> {
-    const index = await this.getIndex(locale);
+  async getResourceEndpoint(type: string, locale?: Locale): Promise<string> {
+    const index = await this.getIndex();
 
     const link = index?.links?.[type] as { href: string };
 
