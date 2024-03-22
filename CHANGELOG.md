@@ -1,5 +1,11 @@
 # drupal-fetch
 
+## 0.1.9
+
+### Patch Changes
+
+- 8b12ef3: Fix for fetching the correct endpoint
+
 ## 0.1.8
 
 ### Patch Changes
