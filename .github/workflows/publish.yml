@@ -15,21 +15,15 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 7
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16.x
-          cache: "pnpm"
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
 
-      - run: pnpm install --frozen-lockfile
+      - run: bun install --frozen-lockfile
       - name: Create Release Pull Request or Publish
         id: changesets
         uses: changesets/action@v1
         with:
-          publish: pnpm run release
+          publish: bun run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
